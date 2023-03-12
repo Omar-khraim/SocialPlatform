@@ -9,4 +9,5 @@ import java.util.List;
 public interface UsersService {
     List<UsersDto> findAllUsers();
     UsersDto findUserById(Long id);
+    void addUser(UsersDto user);
 }
