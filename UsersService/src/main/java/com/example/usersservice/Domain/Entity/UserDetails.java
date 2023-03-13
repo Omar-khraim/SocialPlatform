@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 
@@ -23,16 +24,13 @@ public class UserDetails {
     private String bio;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
     private Date updatedTime;
 
 
     @OneToOne
     Users user;
 
-    @PreUpdate
-    public void onUpdate() {
-        this.updatedTime = new Date();
-    }
 
 
 }
