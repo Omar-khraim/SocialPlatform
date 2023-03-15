@@ -3,10 +3,12 @@ package com.example.usersservice.Controller;
 
 import com.example.usersservice.Domain.DTOs.UsersDto;
 import com.example.usersservice.Service.UsersService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.servlet.http.HttpServletResponse;
+//import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("api/v1/auth")
@@ -19,7 +21,17 @@ public class AuthenticationController {
     }
 
     @PostMapping
-    public void signUp(@RequestBody UsersDto user){
-        usersService.addUser(user);
+    public void signUp( @RequestBody UsersDto user, HttpServletResponse response) throws IOException {
+       int res =usersService.addUser(user);
+
+        if (res == 0) {
+            response.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
+            response.getWriter().write("wrong email format");}
+            else if (res == -1) {
+                response.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
+                response.getWriter().write("Email is already taken");
+        } else {
+            response.setStatus(HttpStatus.OK.value());
+        }
     }
 }
