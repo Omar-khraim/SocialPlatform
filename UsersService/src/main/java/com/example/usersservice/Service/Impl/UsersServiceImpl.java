@@ -4,6 +4,7 @@ import com.example.usersservice.Domain.DTOs.UsersDto;
 import com.example.usersservice.Domain.Entity.Users;
 import com.example.usersservice.Repository.UsersRepo;
 import com.example.usersservice.Service.UsersService;
+import com.example.usersservice.Util.EmailValidator;
 import org.modelmapper.ModelMapper;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,8 +36,13 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public void addUser(UsersDto user) {
+    public int addUser(UsersDto user) {
 //        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (!EmailValidator.isValid(user.getEmail()))
+            return 0;
+        if(usersRepo.existsByEmail(user.getEmail()))
+            return -1;
         usersRepo.save(modelMapper.map(user, Users.class));
+        return 1;
     }
 }
